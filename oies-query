@@ -1,0 +1,12 @@
+#!/usr/bin/env zsh
+
+# https://oeis.org/search?q=1%2C2%2C3%2C6%2C11%2C23%2C47%2C106%2C235&language=english&go=Search
+
+ARGS="${@:1}"
+OIESARGS=$(echo $ARGS | sed 's/ /,/g')
+curl -s "https://oeis.org/search?q=$OIESARGS&language=english&go=Search" | \
+  grep "#EEEEFF" -A 10 | sed 's/  //g' | \
+  grep -v -e '<td' -e '<tr' -e '<a' -e '<table' -e '^$' -e '--' | \
+  head -5 | \
+  awk '{printf("%d. %s\n", NR, $0)}'
+
