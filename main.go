@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/grokify/html-strip-tags-go"
 	"io/ioutil"
-	"log"
+	//"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -34,7 +34,7 @@ func main() {
 // PrettyPrint prints Result in a user readable way
 func PrettyPrint(results Result) {
 	if results.Error != "" {
-		fmt.Fprintf(os.Stderr, "Error: %s", results.Error)
+		fmt.Fprintf(os.Stderr, "Error: %s\n", results.Error)
 		return
 	}
 	fmt.Printf("Found %d results.", results.NumResults)
@@ -55,13 +55,17 @@ func FetchResults(query string) (result Result) {
 	resp, err := http.Get(query)
 
 	if err != nil {
-		log.Panic("Error fetching oeis data: ", err)
+		fmt.Fprintf(os.Stderr, "Error: Network error\n")
+		//log.Panic("Error fetching oeis data",err)
+		os.Exit(-1)
 	}
 	defer resp.Body.Close()
 
 	html, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Panic("Error reading oeis data: ", err)
+		fmt.Fprintf(os.Stderr, "Error: Data returned from oeis.org not readable\n")
+		//log.Panic("Error reading oeis data: ", err)
+		os.Exit(-2)
 	}
 
 	result = HTMLToResult(string(html))
