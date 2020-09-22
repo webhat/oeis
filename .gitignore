@@ -1,0 +1,8 @@
+*.sw[po]
+results.txt
+out
+oeis
+start
+src
+oeis.test
+oeis-query*
