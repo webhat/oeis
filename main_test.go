@@ -133,3 +133,20 @@ func TestGetTopFiveResults(t *testing.T) {
 		})
 	}
 }
+
+func TestPrettyPrint(t *testing.T) {
+	tests := []struct {
+		name    string
+		results Result
+	}{
+		{name: "No results", results: Result{0, []string{}, ""}},
+		{name: "Four (4) Results", results: Result{4, []string{"", "", "", ""}, ""}},
+		{name: "Six (6) Results", results: Result{6, []string{"", "", "", "", "", ""}, ""}},
+		{name: "Error", results: Result{6, []string{"", "", "", "", "", ""}, "Error message"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			PrettyPrint(tt.results)
+		})
+	}
+}

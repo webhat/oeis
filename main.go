@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -32,12 +33,19 @@ func main() {
 
 // PrettyPrint prints Result in a user readable way
 func PrettyPrint(results Result) {
+	if results.Error != "" {
+		fmt.Fprintf(os.Stderr, "Error: %s", results.Error)
+		return
+	}
 	fmt.Printf("Found %d results.", results.NumResults)
 	if results.NumResults > 5 {
 		fmt.Printf(" Showing first five:")
 	}
 	fmt.Println("")
 	for i, elem := range results.Results {
+		if i > 4 {
+			return
+		}
 		fmt.Printf("%d. %s\n", i+1, elem)
 	}
 }
